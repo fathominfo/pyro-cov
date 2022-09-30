@@ -201,7 +201,8 @@ def decompress(name: str) -> str:
             assert result
             DECOMPRESS[name] = result
             return result
-    logger.info("Not an alias: {}".format(name))
+    if not any([name.startswith(r) for r in PANGOLIN_RECOMBINANTS.keys()]):
+        logger.info("Not an alias or recombinant: {}".format(name))
     return name
 #    raise ValueError(f"Unknown alias: {repr(name)}")
 
