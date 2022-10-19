@@ -12,10 +12,17 @@ MAKECMD = $(MAKE)
 # Required manual prerequisites:
 # mkdir ~/work && cd ~/work; \
 # git clone https://github.com/fathominfo/pyro-cov.git; \
-# cd ~/work/pyro-cov/fathom; \
+# cd ~/work/pyro-cov; \
+# git checkout <fathom development branch>; \
+# cd fathom; \
 # make setup-aws
 .PHONY: setup-aws
-setup-aws:
+setup-aws: aws-installs setup
+	echo done.
+
+
+.PHONY: aws-installs
+aws-installs:
 	sudo snap install aws-cli --classic
 	sudo ln -s /usr/bin/python3.8 /usr/bin/python
 	sudo apt install python3.8-venv
@@ -25,7 +32,7 @@ setup-aws:
 # - latest python 3.9.x (on MacOS)
 # - source venv/bin/activate (or fish equivalent)
 .PHONY: setup
-setup: update-all-github-repos
+setup: update-all-github-repos setup-results-dir
 	python -m venv venv; \
 	cd ..; \
 	fathom/venv/bin/pip install --upgrade pip; \
@@ -59,12 +66,14 @@ update-all-github-repos:
 RUN_DT = $(shell date +%Y-%m-%d)
 .PHONY: setup-results-dir
 setup-results-dir:
-	cd ..; \
+	@cd ..; \
 	mkdir -p results.$(RUN_DT)/gisaid; \
 	ln -s results.$(RUN_DT) results; \
-	@echo in results/gisaid dir, run s3 copy with updated file name (timestamp); \
-	@echo run: aws s3 cp s3://pyr0/gisaid/gisaidAndPublic.2022-09-14.masked.pb.gz .; \
-	@echo run: aws s3 cp s3://pyr0/gisaid/metadata_2022_09_19.tsv.gz .
+	echo "results/gisaid dir needs data files copied from S3"; \
+	echo "note: timestamps will change when data is updated"; \
+	echo "note: aws s3 access requires aws-cli and a special policy/role"; \
+	echo run: aws s3 cp s3://pyr0/gisaid/gisaidAndPublic.2022-09-14.masked.pb.gz ../results/gisaid/; \
+	echo run: aws s3 cp s3://pyr0/gisaid/metadata_2022_09_19.tsv.gz ../results/gisaid/
 
 
 .PHONY: run-data-gen
@@ -77,12 +86,12 @@ run-data-gen:
 run-usher:
 	cd ..; \
 	date; \
-	PYTHONPATH=. fathom/venv/bin/python scripts/preprocess_usher.py --tree-file-in $(TREE_FILE) --gisaid-metadata-file-in $(METADATA_FILE)
+	PYTHONPATH=. fathom/venv/bin/python scripts/preprocess_usher.py --tree-file-in $(TREE_FILE) --gisaid-metadata-file-in $(METADATA_FILE); \
 	date
 
 .PHONY: run-pyro-model
 run-pyro-model:
 	cd ..; \
 	date; \
-	PYTHONPATH=. fathom/venv/bin/python scripts/mutrans.py
+	PYTHONPATH=. fathom/venv/bin/python scripts/mutrans.py; \
 	date
