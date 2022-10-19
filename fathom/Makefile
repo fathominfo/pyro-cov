@@ -5,18 +5,21 @@ METADATA_FILE = results/gisaid/metadata_2022_09_19.tsv.gz
 MAKECMD = $(MAKE)
 
 
-# AWS
+# AWS setup task, is probably not going to be run, but is here as a reference
+# Required manual prerequisites:
+# mkdir ~/work && cd ~/work; \
+# git clone https://github.com/fathominfo/pyro-cov.git; \
+# cd ~/work/pyro-cov/fathom; \
+# make setup-aws
 .PHONY: setup-aws
 setup-aws:
 	sudo snap install aws-cli --classic
 	sudo ln -s /usr/bin/python3.8 /usr/bin/python
 	sudo apt install python3.8-venv
-	mkdir work; \
-	cd work && git clone https://github.com/fathominfo/pyro-cov.git
 
 
 # Assumes:
-# - latest python 3.9.x
+# - latest python 3.9.x (on MacOS)
 # - source venv/bin/activate (or fish equivalent)
 .PHONY: setup
 setup: update-all-github-repos
