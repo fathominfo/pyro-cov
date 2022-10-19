@@ -63,8 +63,8 @@ setup-results-dir:
 	mkdir -p results.$(RUN_DT)/gisaid; \
 	ln -s results.$(RUN_DT) results; \
 	@echo in results/gisaid dir, run s3 copy with updated file name (timestamp); \
-	@echo run: aws s3 cp s3://pyr0/gisaid/gisaidAndPublic.2022-09-14.masked.pb.gz .;\
-	@echo copy gisaidAndPublic.YYYY-MM-DD.masked\ \(1\).pb.gz to gisaid dir
+	@echo run: aws s3 cp s3://pyr0/gisaid/gisaidAndPublic.2022-09-14.masked.pb.gz .; \
+	@echo run: aws s3 cp s3://pyr0/gisaid/metadata_2022_09_19.tsv.gz .
 
 
 .PHONY: run-data-gen
