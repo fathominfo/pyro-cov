@@ -1,21 +1,41 @@
 TREE_FILE = results/gisaid/gisaidAndPublic.2022-09-14.masked\ \(1\).pb.gz
 METADATA_FILE = results/gisaid/metadata_2022_09_19.tsv.gz
 
+# MAKECMD = $(MAKE) --makefile $(THIS_MAKEFILE)
+MAKECMD = $(MAKE)
+
+
 # Assumes:
 # - latest python 3.9.x
 # - source venv/bin/activate (or fish equivalent)
 .PHONY: setup
-setup:
+setup: update-all-github-repos
 	python -m venv venv; \
-	venv/bin/pip install --upgrad pip; \
+	venv/bin/pip install --upgrade pip; \
 	venv/bin/pip install -r fathom/requirements.txt; \
-	mkdir -p ~/github/cov-lineages; \
-	cd ~/github/cov-lineages; \
-	git clone https://github.com/cov-lineages/pango-designation.git; \
-	mkdir -p ~/github/netstrain; \
-	cd ~/github/nextstrain; \
-	git clone https://github.com/nextstrain/nextclade.git; \
 	echo "done"
+
+
+.PHONY: update-github-repo
+update-github-repo:
+	@if [ -d "$${HOME}/github/$${ORG_NAME}/$${REPO_NAME}" ]; then \
+		echo "updating $${HOME}/github/$${ORG_NAME}/$${REPO_NAME}"; \
+		cd $${HOME}/github/$${ORG_NAME}/$${REPO_NAME}; \
+		git pull; \
+	else \
+		echo "creating $${HOME}/github/$${ORG_NAME}/$${REPO_NAME}"; \
+		mkdir -p $${HOME}/github/$${ORG_NAME}; \
+		cd $${HOME}/github/$${ORG_NAME}; \
+		git clone https://github.com/$${ORG_NAME}/$${REPO_NAME}.git; \
+	fi
+
+
+.PHONY: update-all-github-repos
+update-all-github-repos:
+	ORG_NAME=cov-lineages   REPO_NAME=pango-designation $(MAKECMD) update-github-repo
+	ORG_NAME=nextstrain     REPO_NAME=nextclade         $(MAKECMD) update-github-repo
+	ORG_NAME=CSSEGISandData REPO_NAME=COVID-19          $(MAKECMD) update-github-repo
+	ORG_NAME=owid           REPO_NAME=covid-19-data     $(MAKECMD) update-github-repo
 
 
 .PHONY: run-usher
