@@ -20,7 +20,7 @@ setup-aws:
 setup: update-all-github-repos
 	python -m venv venv; \
 	venv/bin/pip install --upgrade pip; \
-	venv/bin/pip install -r requirements.txt; \
+	venv/bin/pip install -r requirements.txt
 	echo "done"
 
 
@@ -59,19 +59,19 @@ setup-results-dir:
 .PHONY: run-data-gen
 run-data-gen:
 	cd ..; \
-	ipython generate_epiToPublicAndDate.py
+	fathom/venv/bin/ipython generate_epiToPublicAndDate.py
 
 
 .PHONY: run-usher
 run-usher:
 	cd ..; \
 	date; \
-	PYTHONPATH=. fathom/venv/bin/python scripts/preprocess_usher.py --tree-file-in $(TREE_FILE) --gisaid-metadata-file-in $(METADATA_FILE); \
+	PYTHONPATH=. fathom/venv/bin/python scripts/preprocess_usher.py --tree-file-in $(TREE_FILE) --gisaid-metadata-file-in $(METADATA_FILE)
 	date
 
 .PHONY: run-pyro-model
 run-pyro-model:
 	cd ..; \
 	date; \
-	PYTHONPATH=. fathom/venv/bin/python scripts/mutrans.py; \
+	PYTHONPATH=. fathom/venv/bin/python scripts/mutrans.py
 	date
