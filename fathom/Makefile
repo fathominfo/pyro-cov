@@ -1,4 +1,4 @@
-TREE_FILE = results/gisaid/gisaidAndPublic.2022-09-14.masked\ \(1\).pb.gz
+TREE_FILE = results/gisaid/gisaidAndPublic.2022-09-14.masked.pb.gz
 METADATA_FILE = results/gisaid/metadata_2022_09_19.tsv.gz
 
 # MAKECMD = $(MAKE) --makefile $(THIS_MAKEFILE)
@@ -59,7 +59,7 @@ setup-results-dir:
 .PHONY: run-data-gen
 run-data-gen:
 	cd ..; \
-	fathom/venv/bin/ipython generate_epiToPublicAndDate.py
+	fathom/venv/bin/ipython generate_epiToPublicAndDate.ipynb
 
 
 .PHONY: run-usher
