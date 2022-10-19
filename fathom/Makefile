@@ -12,7 +12,7 @@ MAKECMD = $(MAKE)
 setup: update-all-github-repos
 	python -m venv venv; \
 	venv/bin/pip install --upgrade pip; \
-	venv/bin/pip install -r fathom/requirements.txt; \
+	venv/bin/pip install -r requirements.txt; \
 	echo "done"
 
 
