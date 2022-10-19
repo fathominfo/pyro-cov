@@ -6,6 +6,9 @@ MAKECMD = $(MAKE)
 
 
 # AWS setup task, is probably not going to be run, but is here as a reference
+# Notes:
+#   - 16GB memory is not enough to run generate_epiToPublicAndDate.ipynb
+#   - 64GB is more than enough, not sure how much is needed exactly
 # Required manual prerequisites:
 # mkdir ~/work && cd ~/work; \
 # git clone https://github.com/fathominfo/pyro-cov.git; \
@@ -24,8 +27,10 @@ setup-aws:
 .PHONY: setup
 setup: update-all-github-repos
 	python -m venv venv; \
-	venv/bin/pip install --upgrade pip; \
-	venv/bin/pip install -r requirements.txt
+	cd ..; \
+	fathom/venv/bin/pip install --upgrade pip; \
+	fathom/venv/bin/pip install -e .; \
+	fathom/venv/bin/pip install -r fathom/requirements.txt
 	echo "done"
 
 
