@@ -46,10 +46,21 @@ update-all-github-repos:
 	ORG_NAME=owid           REPO_NAME=covid-19-data     $(MAKECMD) update-github-repo
 
 
+RUN_DT = $(date +%Y-%m-%d)
+.PHONY: setup-results-dir
+setup-results-dir:
+	cd ..; \
+	mkdir -p results.$(RUN_DT)/gisaid; \
+	ln -s results.$(RUN_DT) results; \
+	echo copy metadata_YYYY_MM_DD.tsv.gz to gisaid dir; \
+	echo copy gisaidAndPublic.YYYY-MM-DD.masked\ \(1\).pb.gz to gisaid dir
+
+
 .PHONY: run-data-gen
 run-data-gen:
 	cd ..; \
 	ipython generate_epiToPublicAndDate.py
+
 
 .PHONY: run-usher
 run-usher:
