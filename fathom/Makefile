@@ -5,6 +5,14 @@ METADATA_FILE = results/gisaid/metadata_2022_09_19.tsv.gz
 MAKECMD = $(MAKE)
 
 
+# AWS
+.PHONY: setup-aws
+setup-aws:
+	sudo snap install aws-cli
+	sudo ln -s /usr/bin/python3.8 /usr/bin/python
+	sudo apt install python3.8-venv
+
+
 # Assumes:
 # - latest python 3.9.x
 # - source venv/bin/activate (or fish equivalent)
@@ -37,6 +45,11 @@ update-all-github-repos:
 	ORG_NAME=CSSEGISandData REPO_NAME=COVID-19          $(MAKECMD) update-github-repo
 	ORG_NAME=owid           REPO_NAME=covid-19-data     $(MAKECMD) update-github-repo
 
+
+.PHONY: run-data-gen
+run-data-gen:
+	cd ..; \
+	ipython generate_epiToPublicAndDate.py
 
 .PHONY: run-usher
 run-usher:
