@@ -11,6 +11,8 @@ setup-aws:
 	sudo snap install aws-cli --classic
 	sudo ln -s /usr/bin/python3.8 /usr/bin/python
 	sudo apt install python3.8-venv
+	mkdir work; \
+	cd work && git clone https://github.com/fathominfo/pyro-cov.git
 
 
 # Assumes:
@@ -46,14 +48,15 @@ update-all-github-repos:
 	ORG_NAME=owid           REPO_NAME=covid-19-data     $(MAKECMD) update-github-repo
 
 
-RUN_DT = $(date +%Y-%m-%d)
+RUN_DT = $(shell date +%Y-%m-%d)
 .PHONY: setup-results-dir
 setup-results-dir:
 	cd ..; \
 	mkdir -p results.$(RUN_DT)/gisaid; \
 	ln -s results.$(RUN_DT) results; \
-	echo copy metadata_YYYY_MM_DD.tsv.gz to gisaid dir; \
-	echo copy gisaidAndPublic.YYYY-MM-DD.masked\ \(1\).pb.gz to gisaid dir
+	@echo in results/gisaid dir, run s3 copy with updated file name (timestamp); \
+	@echo run: aws s3 cp s3://pyr0/gisaid/gisaidAndPublic.2022-09-14.masked.pb.gz .;\
+	@echo copy gisaidAndPublic.YYYY-MM-DD.masked\ \(1\).pb.gz to gisaid dir
 
 
 .PHONY: run-data-gen
