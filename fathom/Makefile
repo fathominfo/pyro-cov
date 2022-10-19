@@ -8,7 +8,7 @@ MAKECMD = $(MAKE)
 # AWS
 .PHONY: setup-aws
 setup-aws:
-	sudo snap install aws-cli
+	sudo snap install aws-cli --classic
 	sudo ln -s /usr/bin/python3.8 /usr/bin/python
 	sudo apt install python3.8-venv
 
