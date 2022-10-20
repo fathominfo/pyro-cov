@@ -31,12 +31,13 @@ aws-installs:
 # Assumes:
 # - latest python 3.9.x (on MacOS)
 # - source venv/bin/activate (or fish equivalent)
+# - using notes from https://pytorch.org/get-started/locally/
 .PHONY: setup
 setup: update-all-github-repos setup-results-dir
 	python -m venv venv; \
 	cd ..; \
 	fathom/venv/bin/pip install --upgrade pip; \
-	fathom/venv/bin/pip install torch torchvision --extra-index-url https://download.pytorch.org/whl/cu116; \
+	pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116; \
 	fathom/venv/bin/pip install -e .; \
 	fathom/venv/bin/pip install -r fathom/requirements.txt
 	echo "done"
