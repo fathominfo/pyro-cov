@@ -18,22 +18,28 @@ MAKECMD = $(MAKE)
 # make setup-aws
 .PHONY: setup-aws
 setup-aws: aws-installs setup
-	echo done.
+	echo setup-aws done.
 
 
 .PHONY: aws-installs
 aws-installs:
 	sudo snap install aws-cli --classic
 	sudo ln -s /usr/bin/python3.8 /usr/bin/python
-	sudo apt --y install python3.8-venv
+	sudo apt install -y python3.8-venv
+	echo aws-installs done.
+
+
+.PHONY: setup
+setup: update-all-github-repos setup-results-dir setup-python-env
+	echo setup done.
 
 
 # Assumes:
-# - latest python 3.9.x (on MacOS)
+# - latest python 3.9.x (on MacOS), 3.8.x (on EC2, Ubuntu)
 # - source venv/bin/activate (or fish equivalent)
 # - using notes from https://pytorch.org/get-started/locally/
-.PHONY: setup
-setup: update-all-github-repos setup-results-dir
+.PHONY: setup-python-env
+setup-python-env:
 	python -m venv venv; \
 	cd ..; \
 	fathom/venv/bin/pip install --upgrade pip; \
