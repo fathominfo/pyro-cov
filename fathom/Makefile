@@ -43,7 +43,7 @@ setup-python-env:
 	python -m venv venv; \
 	cd ..; \
 	fathom/venv/bin/pip install --upgrade pip; \
-	pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116; \
+	pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116; \
 	fathom/venv/bin/pip install -e .; \
 	fathom/venv/bin/pip install -r fathom/requirements.txt
 	echo "done"
