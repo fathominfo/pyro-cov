@@ -25,7 +25,7 @@ setup-aws: aws-installs setup
 aws-installs:
 	sudo snap install aws-cli --classic
 	sudo ln -s /usr/bin/python3.8 /usr/bin/python
-	sudo apt install python3.8-venv
+	sudo apt --y install python3.8-venv
 
 
 # Assumes:
@@ -36,6 +36,7 @@ setup: update-all-github-repos setup-results-dir
 	python -m venv venv; \
 	cd ..; \
 	fathom/venv/bin/pip install --upgrade pip; \
+	fathom/venv/bin/pip install torch torchvision --extra-index-url https://download.pytorch.org/whl/cu116; \
 	fathom/venv/bin/pip install -e .; \
 	fathom/venv/bin/pip install -r fathom/requirements.txt
 	echo "done"
