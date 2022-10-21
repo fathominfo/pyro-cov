@@ -1,8 +1,11 @@
 ipython==8.5.0
 nbformat==5.7.0
 pandas==1.5.0
-# torch==1.12.1
-# torchvision==0.13.1
+
+# pytorch is laptop only, on AWS it's installed via special pip command
+torch==1.12.1
+torchvision==0.13.1
+
 tqdm==4.64.1
 pyro-ppl==1.8.2
 protobuf==3.20.*

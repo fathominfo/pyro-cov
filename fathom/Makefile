@@ -9,6 +9,12 @@ MAKECMD = $(MAKE)
 # Notes:
 #   - 16GB memory is not enough to run generate_epiToPublicAndDate.ipynb
 #   - 64GB is more than enough, not sure how much is needed exactly
+#   - g5.4xlarge is probably the sweet spot (only available in select regions, I used Oregon)
+#   - Use the "Deep Learning AMI GPU PyTorch 1.12.1 (Ubuntu 20.04) 20221019" AMI, PyTorch 1.12.1 support CUDA 11.6 which is installed (check with nvidia-smi)
+#   - There is a pyro-dev ssh key-pair available in each region (stored in the 1Password CSO Vault, which can be moved)
+#   - Needs 300 GB root disk (200GB was not enough the github repos are huge)
+#   - Add Pyro-Dev-S3 role to security for S3 access
+#   - Allow Custom TCP inbound on port 5000 for Jupyter access (if needed)
 # Required manual prerequisites:
 # mkdir ~/work && cd ~/work; \
 # git clone https://github.com/fathominfo/pyro-cov.git; \
@@ -59,7 +65,9 @@ update-github-repo:
 		echo "creating $${HOME}/github/$${ORG_NAME}/$${REPO_NAME}"; \
 		mkdir -p $${HOME}/github/$${ORG_NAME}; \
 		cd $${HOME}/github/$${ORG_NAME}; \
-		git clone https://github.com/$${ORG_NAME}/$${REPO_NAME}.git; \
+		aws s3 cp s3://pyr0/github/$${REPO_NAME}-221019.tgz .; \
+		tar xvfz cov-lineages-221019.tgz; \
+		# git clone https://github.com/$${ORG_NAME}/$${REPO_NAME}.git; \
 	fi
 
 
@@ -97,9 +105,16 @@ run-usher:
 	PYTHONPATH=. fathom/venv/bin/python scripts/preprocess_usher.py --tree-file-in $(TREE_FILE) --gisaid-metadata-file-in $(METADATA_FILE); \
 	date
 
+
 .PHONY: run-pyro-model
 run-pyro-model:
 	cd ..; \
 	date; \
 	PYTHONPATH=. fathom/venv/bin/python scripts/mutrans.py; \
 	date
+
+
+.PHONY: run-notebook
+run-notebook:
+	cd ..; \
+	PYTHONPATH=. fathom/venv/bin/jupyter-notebook --no-browser --port=5000
