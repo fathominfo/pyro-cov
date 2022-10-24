@@ -43,7 +43,7 @@ setup: update-all-github-repos setup-results-dir setup-python-env
 # Assumes:
 # - latest python 3.9.x (on MacOS), 3.8.x (on EC2, Ubuntu)
 # - source venv/bin/activate (or fish equivalent)
-# - using notes from https://pytorch.org/get-started/locally/
+# - using notes from https://pytorch.org/get-started/locally/ for PyTorch 1.12.1, Linux, pip, and CUDA 11.6
 .PHONY: setup-python-env
 setup-python-env:
 	python -m venv venv; \
