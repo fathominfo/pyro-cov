@@ -65,8 +65,8 @@ update-github-repo:
 		echo "creating $${HOME}/github/$${ORG_NAME}/$${REPO_NAME}"; \
 		mkdir -p $${HOME}/github/$${ORG_NAME}; \
 		cd $${HOME}/github/$${ORG_NAME}; \
-		aws s3 cp s3://pyr0/github/$${REPO_NAME}-221019.tgz .; \
-		tar xvfz $${REPO_NAME}-221019.tgz; \
+		aws s3 cp s3://pyr0/github/$${ORG_NAME}--$${REPO_NAME}-221019.tgz .; \
+		tar xvfz $${ORG_NAME}--$${REPO_NAME}-221019.tgz; \
 		cd $${REPO_NAME} && git pull; \
 		# git clone https://github.com/$${ORG_NAME}/$${REPO_NAME}.git; \
 	fi
