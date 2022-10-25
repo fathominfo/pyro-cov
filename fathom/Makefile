@@ -76,7 +76,7 @@ update-all-github-repos:
 	ORG_NAME=cov-lineages   REPO_NAME=pango-designation $(MAKECMD) update-github-repo
 	ORG_NAME=nextstrain     REPO_NAME=nextclade         $(MAKECMD) update-github-repo
 	ORG_NAME=CSSEGISandData REPO_NAME=COVID-19          $(MAKECMD) update-github-repo
-	ORG_NAME=owid           REPO_NAME=covid-19-data     $(MAKECMD) update-github-repo
+	#ORG_NAME=owid           REPO_NAME=covid-19-data     $(MAKECMD) update-github-repo
 
 
 RUN_DT = $(shell date +%Y-%m-%d)
@@ -111,6 +111,14 @@ run-pyro-model:
 	cd ..; \
 	date; \
 	PYTHONPATH=. fathom/venv/bin/python scripts/mutrans.py; \
+	date
+
+
+.PHONY: run-pyro-model-vary-holdout
+run-pyro-model-vary-holdout:
+	cd ..; \
+	date; \
+	PYTHONPATH=. fathom/venv/bin/python scripts/mutrans.py --vary-holdout; \
 	date
 
 
