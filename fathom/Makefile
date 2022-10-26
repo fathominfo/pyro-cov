@@ -64,11 +64,11 @@ update-github-repo:
 	else \
 		echo "creating $${HOME}/github/$${ORG_NAME}/$${REPO_NAME}"; \
 		mkdir -p $${HOME}/github/$${ORG_NAME}; \
-		cd $${HOME}/github/$${ORG_NAME}; \
-		aws s3 cp s3://pyr0/github/$${ORG_NAME}--$${REPO_NAME}-221019.tgz .; \
-		tar xvfz $${ORG_NAME}--$${REPO_NAME}-221019.tgz; \
-		cd $${ORG_NAME}/$${REPO_NAME} && git pull; \
-		# git clone https://github.com/$${ORG_NAME}/$${REPO_NAME}.git; \
+		# cd $${HOME}/github; \
+		# aws s3 cp s3://pyr0/github/$${ORG_NAME}--$${REPO_NAME}-221019.tgz .; \
+		# tar xvfz $${ORG_NAME}--$${REPO_NAME}-221019.tgz; \
+		# cd $${ORG_NAME}/$${REPO_NAME} && git pull; \
+		git clone --depth 1 https://github.com/$${ORG_NAME}/$${REPO_NAME}.git; \
 	fi
 
 
@@ -126,4 +126,4 @@ run-pyro-model-vary-holdout:
 .PHONY: run-notebook
 run-notebook:
 	cd ..; \
-	PYTHONPATH=. fathom/venv/bin/jupyter-notebook --no-browser --port=5000
+	PYTHONPATH=. fathom/venv/bin/jupyter-notebook --no-browser --ip=0.0.0.0 --port=5000
