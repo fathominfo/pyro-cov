@@ -24,7 +24,7 @@ MAKECMD = $(MAKE)
 # make setup-aws
 .PHONY: setup-aws
 setup-aws: aws-installs setup
-	echo setup-aws done.
+	@echo >>>>>>>>>> setup-aws done.
 
 
 .PHONY: aws-installs
@@ -32,12 +32,12 @@ aws-installs:
 	sudo snap install aws-cli --classic
 	sudo ln -s /usr/bin/python3.8 /usr/bin/python
 	sudo apt install -y python3.8-venv
-	echo aws-installs done.
+	@echo >>>>>>>>>> aws-installs done.
 
 
 .PHONY: setup
-setup: update-all-github-repos setup-results-dir setup-python-env
-	echo setup done.
+setup: update-all-github-repos setup-results-dir populate-results-dir setup-python-env
+	@echo >>>>>>>>>> setup done.
 
 
 # Assumes:
@@ -52,7 +52,7 @@ setup-python-env:
 	fathom/venv/bin/pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116; \
 	fathom/venv/bin/pip install -e .; \
 	fathom/venv/bin/pip install -r fathom/requirements.txt
-	echo "done"
+	@echo >>>>>>>>>> done
 
 
 .PHONY: update-github-repo
@@ -64,6 +64,7 @@ update-github-repo:
 	else \
 		echo "creating $${HOME}/github/$${ORG_NAME}/$${REPO_NAME}"; \
 		mkdir -p $${HOME}/github/$${ORG_NAME}; \
+		cd $${HOME}/github/$${ORG_NAME}; \
 		# cd $${HOME}/github; \
 		# aws s3 cp s3://pyr0/github/$${ORG_NAME}--$${REPO_NAME}-221019.tgz .; \
 		# tar xvfz $${ORG_NAME}--$${REPO_NAME}-221019.tgz; \
@@ -81,16 +82,21 @@ update-all-github-repos:
 
 
 RUN_DT = $(shell date +%Y-%m-%d)
+RESULTS_DIR = ~/work/results/results.$(RUN_DT)
 .PHONY: setup-results-dir
 setup-results-dir:
 	@cd ..; \
-	mkdir -p results.$(RUN_DT)/gisaid; \
-	ln -s results.$(RUN_DT) results; \
-	echo "results/gisaid dir needs data files copied from S3"; \
-	echo "note: timestamps will change when data is updated"; \
-	echo "note: aws s3 access requires aws-cli and a special policy/role"; \
-	echo run: aws s3 cp s3://pyr0/gisaid/gisaidAndPublic.2022-09-14.masked.pb.gz ../results/gisaid/; \
-	echo run: aws s3 cp s3://pyr0/gisaid/metadata_2022_09_19.tsv.gz ../results/gisaid/
+	mkdir -p $(RESULTS_DIR)/gisaid; \
+	ln -s $(RESULTS_DIR) results
+
+
+.PHONY: populate-results-dir
+populate-results-dir:
+	@echo >>>>>>>>>> results/gisaid dir needs data files copied from S3; \
+	echo >>>>>>>>>> note: timestamps will change when data is updated; \
+	echo >>>>>>>>>> note: aws s3 access requires aws-cli and a special policy/role
+	aws s3 cp s3://pyr0/gisaid/gisaidAndPublic.2022-09-14.masked.pb.gz ../results/gisaid/
+	aws s3 cp s3://pyr0/gisaid/metadata_2022_09_19.tsv.gz ../results/gisaid/
 
 
 .PHONY: run-data-gen
