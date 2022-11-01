@@ -128,7 +128,17 @@ run-pyro-model-vary-holdout:
 	PYTHONPATH=. fathom/venv/bin/python scripts/mutrans.py --vary-holdout; \
 	date
 
-
+# To generate the strain_prevalence.png chart:
+# - make sure you have the required github repos (see above, included in setup)
+# - create a results dir (see above, included in setup)
+# - populate the results dir with tree and metadata file (see above, included in setup)
+# - run the generate_epiToPublicAndDate.ipynb notebook (see above, run-data-gen)
+# - run the usher preprocesser (see above, run-usher)
+# - run the pyro model notebook (see above, run-pyro-model)
+# - run the mutrans.ipynb notebook
+#   - run this task to start the server, then
+#   - open the notebook, and 
+#   - run through the cell with "paper/strain_prevalence.png" output
 .PHONY: run-notebook
 run-notebook:
 	cd ..; \
